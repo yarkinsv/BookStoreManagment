@@ -1,6 +1,8 @@
 package store.DAO;
 
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import store.Model.Book;
 
 import javax.sql.DataSource;
@@ -15,6 +17,7 @@ import static java.util.Objects.requireNonNull;
 public class BookJdbcDAO implements BookDAO {
 
     private final DataSource dataSource;
+    private Logger log = LoggerFactory.getLogger(BookDAO.class);
 
     @Inject
     public BookJdbcDAO(DataSource dataSource) {
@@ -23,6 +26,7 @@ public class BookJdbcDAO implements BookDAO {
 
     public void insert(Book book) {
         if (book.getId() != null) {
+            log.error("Can not save book with already assigned id: id={}, title={}", book.getId(), book.getTitle());
             throw new IllegalArgumentException("Can not save " + book + " with already assigned id");
         }
 
@@ -43,6 +47,7 @@ public class BookJdbcDAO implements BookDAO {
                 }
             }
         } catch (final SQLException e) {
+            log.error("Failed to persist book {}", e, book.getTitle());
             throw new RuntimeException("failed to persist " + book, e);
         }
     }
