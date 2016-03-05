@@ -1,9 +1,12 @@
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import store.DAO.TaskDAO;
 import store.DAO.TaskHibernateDAO;
 import store.Model.Task;
 
@@ -19,16 +22,12 @@ import static org.junit.Assert.assertTrue;
 
 public class TaskDAOTest {
 
-    private TaskHibernateDAO taskDAO;
-    private SessionFactory sessionFactory;
+    private TaskDAO taskDAO;
 
     @Before
     public void setUpDBTestBaseClass() {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate_test.cfg.xml");
-        StandardServiceRegistryBuilder ssrb = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-        sessionFactory = configuration.buildSessionFactory(ssrb.build());
-        taskDAO = new TaskHibernateDAO(sessionFactory);
+        Injector injector = Guice.createInjector(new BookStoreTestModule());
+        taskDAO = injector.getInstance(TaskDAO.class);
     }
 
     @Test

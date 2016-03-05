@@ -1,5 +1,6 @@
 package store.DAO;
 
+import com.google.inject.Inject;
 import store.Model.Book;
 
 import javax.sql.DataSource;
@@ -15,6 +16,7 @@ public class BookJdbcDAO implements BookDAO {
 
     private final DataSource dataSource;
 
+    @Inject
     public BookJdbcDAO(DataSource dataSource) {
         this.dataSource = dataSource;
     }

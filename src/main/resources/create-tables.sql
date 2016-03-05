@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS tasks;
+
 CREATE TABLE books (
 	id          SERIAL PRIMARY KEY ,
 	title       TEXT,

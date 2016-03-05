@@ -1,3 +1,6 @@
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import store.BookStoreModule;
 import store.DAO.BookDAO;
 import store.DAO.BookJdbcDAO;
 import store.Model.Book;
@@ -14,36 +17,10 @@ import java.util.Date;
 
 class Main {
 
-    public static void main(final String... args) throws IOException,SQLException {
-/*
-        final Properties properties = PropertiesFactory.load();
-
-        final DataSource dataSource = createPGSimpleDataSource(
-                properties.getProperty("jdbc.server"),
-                Integer.valueOf(properties.getProperty("jdbc.port")),
-                properties.getProperty("jdbc.user"),
-                properties.getProperty("jdbc.password"),
-                properties.getProperty("jdbc.database"),
-                properties.getProperty("jdbc.schema")
-        );
-*/
-        BookService service = new BookServiceImpl(
-                new BookJdbcDAO(null),
-                new TaskHibernateDAO(HibernateSessionFactory.createSessionFactory())
-        );
-
-        Book book = Book.create("New book", "Author", 25);
-
-        service.registerNewBook(book);
-    }
-
-    private static void play(final BookDAO bookDAO) {
-        //bookDAO.insert(Book.create("Игра в бисер", "Герман Гессе", 450));
-        bookDAO.delete(2);
-
-
-    }
-
-    private Main() {
+    public static void main(final String... args) {
+        Injector injector = Guice.createInjector(new BookStoreModule());
+        BookService service = injector.getInstance(BookService.class);
+        BookDAO bookDAO = injector.getInstance(BookDAO.class);
+        bookDAO.insert(Book.create("Игра в бисер", "Герман Гессе", 450));
     }
 }

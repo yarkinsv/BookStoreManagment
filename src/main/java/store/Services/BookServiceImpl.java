@@ -1,5 +1,6 @@
 package store.Services;
 
+import com.google.inject.Inject;
 import org.hibernate.Transaction;
 import store.DAO.BookDAO;
 import store.DAO.TaskDAO;
@@ -16,6 +17,7 @@ public class BookServiceImpl implements BookService {
     private BookDAO bookDAO;
     private TaskDAO taskDAO;
 
+    @Inject
     public BookServiceImpl(BookDAO bookDAO, TaskDAO taskDAO) {
         this.bookDAO = bookDAO;
         this.taskDAO = taskDAO;

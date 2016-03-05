@@ -1,5 +1,6 @@
 package store.DAO;
 
+import com.google.inject.Inject;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,6 +23,7 @@ public class TaskHibernateDAO implements TaskDAO {
     private Connection connection;
     private Transaction transaction;
 
+    @Inject
     public TaskHibernateDAO(final SessionFactory sessionFactory) {
         this.sessionFactory = requireNonNull(sessionFactory);
     }

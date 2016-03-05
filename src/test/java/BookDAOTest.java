@@ -1,4 +1,5 @@
 import org.junit.Test;
+import store.DAO.BookDAO;
 import store.Model.Book;
 import store.DAO.BookJdbcDAO;
 
@@ -9,8 +10,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class BookDAOTest extends DAOTestBase {
-
-    private static final BookJdbcDAO bookJdbcDAO = new BookJdbcDAO(database);
 
     @Test
     public void insertShouldInsertNewBookInDBAndReturnBookWithAssignedId() throws Exception {
