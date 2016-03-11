@@ -1,14 +1,14 @@
+package book;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import module.BookStoreTestModule;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import store.DAO.BookDAO;
-import store.DAO.BookJdbcDAO;
+import store.book.BookDAO;
 
 import javax.sql.DataSource;
 

@@ -1,6 +1,4 @@
-package store.DAO;
-
-import store.Model.Book;
+package store.book;
 
 import java.sql.Connection;
 import java.util.List;

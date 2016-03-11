@@ -5,9 +5,6 @@
 
 <hibernate-configuration>
     <session-factory>
-
-        <property name="hibernate.current_session_context_class">thread</property>
-
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.url">jdbc:postgresql://localhost/storedb</property>
@@ -26,7 +23,7 @@
         <property name="hibernate.current_session_context_class">thread</property>
 
         <!-- Annotated entity classes -->
-        <mapping class="store.Model.Task"/>
+        <mapping class="store.task.Task"/>
 
     </session-factory>
 </hibernate-configuration>

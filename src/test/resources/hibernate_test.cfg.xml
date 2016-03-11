@@ -24,7 +24,7 @@
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
         <!-- Annotated entity classes -->
-        <mapping class="store.Model.Task"/>
+        <mapping class="store.task.Task"/>
 
     </session-factory>
 </hibernate-configuration>

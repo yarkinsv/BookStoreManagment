@@ -1,4 +1,4 @@
-package store.Model;
+package store.book;
 
 /**
  * Represents Book entity by its Id, Title, Author and Pages Count.
@@ -82,7 +82,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "store.Model.Book{" +
+        return "Book{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +

@@ -1,7 +1,6 @@
-package store.DAO;
+package store.task;
 
 import org.hibernate.Transaction;
-import store.Model.Task;
 
 import java.sql.Connection;
 import java.util.List;
@@ -16,13 +15,6 @@ public interface TaskDAO {
      * @param task task to add, its id must be null or exception will be thrown.
      */
     void insert(Task task);
-
-    /**
-     * Add new Task to the database. And returns opened connection with uncommited transaction.
-     * @param task
-     * @return Connection with uncommited transaction of inserted record.
-     */
-    void insertNoCommit(Task task);
 
     /**
      * Get existing task from the database.
@@ -48,16 +40,4 @@ public interface TaskDAO {
      * @param taskId id of a task to be deleted
      */
     void delete(int taskId);
-
-    /**
-     * Get active connection after insertNoCommit method executed
-     * @return
-     */
-    Connection getCurrentConnection();
-
-    /**
-     * Get active transaction after insertNoCommit method executed
-     * @return
-     */
-    Transaction openTransaction();
 }

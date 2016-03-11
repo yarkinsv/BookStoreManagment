@@ -1,4 +1,4 @@
-package store.Model;
+package store.task;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -114,7 +114,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "store.Model.Task{" +
+        return "Task{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

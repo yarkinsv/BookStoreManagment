@@ -1,6 +1,6 @@
-package store.Services;
+package store.book;
 
-import store.Model.Book;
+import store.book.Book;
 
 import java.util.List;
 

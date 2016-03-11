@@ -1,9 +1,8 @@
-package store.DAO;
+package store.book;
 
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import store.Model.Book;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -17,7 +16,7 @@ import static java.util.Objects.requireNonNull;
 public class BookJdbcDAO implements BookDAO {
 
     private final DataSource dataSource;
-    private Logger log = LoggerFactory.getLogger(BookDAO.class);
+    private static final Logger log = LoggerFactory.getLogger(BookDAO.class);
 
     @Inject
     public BookJdbcDAO(DataSource dataSource) {
@@ -26,30 +25,16 @@ public class BookJdbcDAO implements BookDAO {
 
     public void insert(Book book) {
         if (book.getId() != null) {
-            log.error("Can not save book with already assigned id: id={}, title={}", book.getId(), book.getTitle());
             throw new IllegalArgumentException("Can not save " + book + " with already assigned id");
         }
 
         try (final Connection connection = dataSource.getConnection()) {
-            final String query = "INSERT INTO books (title, author, pages_count) VALUES (?, ?, ?)";
-            try (final PreparedStatement statement =
-                         connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-                statement.setString(1, book.getTitle());
-                statement.setString(2, book.getAuthor());
-                statement.setInt(3, book.getPagesCount());
-
-                statement.executeUpdate();
-
-                try (final ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    book.setId(generatedKeys.getInt(1));
-                }
-            }
+            persistBook(book, connection);
         } catch (final SQLException e) {
-            log.error("Failed to persist book {}", e, book.getTitle());
             throw new RuntimeException("failed to persist " + book, e);
         }
+
+        log.info("New book has been saved: id={}, title={}", book.getId(), book.getTitle());
     }
 
     public void insert(Book book, Connection connection) {
@@ -58,23 +43,27 @@ public class BookJdbcDAO implements BookDAO {
         }
 
         try {
-            final String query = "INSERT INTO books (title, author, pages_count) VALUES (?, ?, ?)";
-            try (final PreparedStatement statement =
-                         connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-                statement.setString(1, book.getTitle());
-                statement.setString(2, book.getAuthor());
-                statement.setInt(3, book.getPagesCount());
-
-                statement.executeUpdate();
-
-                try (final ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    book.setId(generatedKeys.getInt(1));
-                }
-            }
+            persistBook(book, connection);
         } catch (final SQLException e) {
             throw new RuntimeException("failed to persist " + book, e);
+        }
+    }
+
+    private void persistBook(Book book, Connection connection) throws SQLException {
+        final String query = "INSERT INTO books (title, author, pages_count) VALUES (?, ?, ?)";
+        try (final PreparedStatement statement =
+                     connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, book.getTitle());
+            statement.setString(2, book.getAuthor());
+            statement.setInt(3, book.getPagesCount());
+
+            statement.executeUpdate();
+
+            try (final ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                generatedKeys.next();
+                book.setId(generatedKeys.getInt(1));
+            }
         }
     }
 
@@ -133,8 +122,7 @@ public class BookJdbcDAO implements BookDAO {
 
         try (final Connection connection = dataSource.getConnection()) {
             final String query = "UPDATE books SET title = ?, author = ?, pages_count = ? WHERE id = ?";
-            try (final PreparedStatement statement =
-                         connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            try (final PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, book.getTitle());
                 statement.setString(2, book.getAuthor());
                 statement.setInt(3, book.getPagesCount());
@@ -148,11 +136,7 @@ public class BookJdbcDAO implements BookDAO {
     }
 
     public void delete(int bookId) {
-
-
         try (final Connection connection = dataSource.getConnection()) {
-            connection.commit();
-
             final String query = "DELETE FROM books WHERE id = ?";
             try (final PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, bookId);

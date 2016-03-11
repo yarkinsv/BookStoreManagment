@@ -2,32 +2,28 @@ package store;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import org.hibernate.SessionFactory;
-import store.DAO.BookDAO;
-import store.DAO.BookJdbcDAO;
-import store.DAO.TaskDAO;
-import store.DAO.TaskHibernateDAO;
-import store.Services.BookService;
-import store.Services.BookServiceImpl;
+import store.book.BookDAO;
+import store.book.BookJdbcDAO;
+import store.task.TaskDAO;
+import store.task.TaskHibernateDAO;
+import store.book.BookService;
+import store.book.BookServiceImpl;
+import store.task.TaskService;
 import utils.HibernateSessionFactory;
 import utils.PropertiesFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import static utils.DataSourceFactory.createPGSimpleDataSource;
 
-public class BookStoreModule extends AbstractModule {
-    @Override
-    protected void configure() {
-        bind(BookDAO.class).to(BookJdbcDAO.class);
-        bind(TaskDAO.class).to(TaskHibernateDAO.class);
-        bind(BookService.class).to(BookServiceImpl.class);
-    }
+public class BookStoreModule extends BookStoreModuleBase {
 
     @Provides
+    @Singleton
     public DataSource provideDataSource() {
         final Properties properties;
         try {
@@ -50,6 +46,7 @@ public class BookStoreModule extends AbstractModule {
     }
 
     @Provides
+    @Singleton
     public SessionFactory provideSessionFactory() {
         return HibernateSessionFactory.createSessionFactory();
     }
